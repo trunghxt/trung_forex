@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forex Journal Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1>Forex Journal Dashboard</h1>
+            </div>
+            <div class="header-controls">
+                <select id="monthSelect">
+                    <option value="" disabled selected>Select Month</option>
+                </select>
+                <button id="refreshBtn" class="btn-refresh">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 4v6h-6"></path>
+                        <path d="M1 20v-6h6"></path>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    Refresh
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <!-- KPI Section -->
+            <section class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Net PnL</div>
+                    <div class="kpi-value" id="kpi-net-pnl">Loading...</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Trades</div>
+                    <div class="kpi-value" id="kpi-total-trades">Loading...</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Win Rate</div>
+                    <div class="kpi-value" id="kpi-win-rate">Loading...</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Profit Factor</div>
+                    <div class="kpi-value" id="kpi-profit-factor">Loading...</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Gross Profit</div>
+                    <div class="kpi-value profit-text" id="kpi-gross-profit">Loading...</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Gross Loss</div>
+                    <div class="kpi-value loss-text" id="kpi-gross-loss">Loading...</div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-grid">
+                <div class="chart-card">
+                    <h3>Cumulative PnL</h3>
+                    <div class="chart-container">
+                        <canvas id="chart-cumulative"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>PnL by Symbol</h3>
+                    <div class="chart-container">
+                        <canvas id="chart-symbol"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Close Reason</h3>
+                    <div class="chart-container">
+                        <canvas id="chart-reason"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detailed Table Section -->
+            <section class="details-section">
+                <div class="table-header">
+                    <h2>Trade Details</h2>
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Search symbol, ticket, reason...">
+                        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="tradesTable">
+                        <thead>
+                            <tr>
+                                <th data-sort="closing_time_utc">Closing Time UTC</th>
+                                <th data-sort="symbol">Symbol</th>
+                                <th data-sort="type">Type</th>
+                                <th data-sort="lots">Lots</th>
+                                <th data-sort="profit_usd">Profit (USD)</th>
+                                <th data-sort="commission_usd">Comm (USD)</th>
+                                <th data-sort="swap_usd">Swap (USD)</th>
+                                <th data-sort="close_reason">Reason</th>
+                                <th data-sort="ticket">Ticket</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
