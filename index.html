@@ -17,9 +17,22 @@
                 <h1>Trunghx Forex 2026</h1>
             </div>
             <div class="header-controls">
-                <select id="monthSelect">
-                    <option value="" disabled selected>Select Month</option>
-                </select>
+                <div class="month-select-wrapper">
+                    <label for="monthSelect">Tháng:</label>
+                    <select id="monthSelect">
+                        <option value="" disabled selected>Select Month</option>
+                    </select>
+                </div>
+                <div class="date-range-container">
+                    <div class="date-input-wrapper">
+                        <label for="fromDate">Từ ngày:</label>
+                        <input type="date" id="fromDate" class="date-input">
+                    </div>
+                    <div class="date-input-wrapper">
+                        <label for="toDate">Đến ngày:</label>
+                        <input type="date" id="toDate" class="date-input">
+                    </div>
+                </div>
                 <button id="refreshBtn" class="btn-refresh">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">

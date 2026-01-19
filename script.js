@@ -7,6 +7,8 @@ let charts = {};
 // DOM Elements
 const els = {
     monthSelect: document.getElementById('monthSelect'),
+    fromDate: document.getElementById('fromDate'),
+    toDate: document.getElementById('toDate'),
     refreshBtn: document.getElementById('refreshBtn'),
     searchInput: document.getElementById('searchInput'),
     tableBody: document.querySelector('#tradesTable tbody'),
@@ -33,8 +35,10 @@ async function init() {
 
 function setupEventListeners() {
     els.monthSelect.addEventListener('change', (e) => loadData(e.target.value));
+    els.fromDate.addEventListener('change', () => filterByDateRange());
+    els.toDate.addEventListener('change', () => filterByDateRange());
     els.refreshBtn.addEventListener('click', () => loadData(currentMonthKey));
-    els.searchInput.addEventListener('input', (e) => renderTable(allTrades, e.target.value));
+    els.searchInput.addEventListener('input', (e) => renderTable(getFilteredTrades(), e.target.value));
 
     // Sort headers
     document.querySelectorAll('th[data-sort]').forEach(th => {
@@ -89,9 +93,12 @@ async function loadData(month) {
         // Sort by closing time asc for chart calculation
         allTrades.sort((a, b) => new Date(a.closing_time_utc) - new Date(b.closing_time_utc));
 
-        renderKPIs(allTrades);
-        renderCharts(allTrades);
-        renderTable(allTrades);
+        // Set date range to month boundaries
+        updateDateRangeForMonth(month);
+
+        renderKPIs(getFilteredTrades());
+        renderCharts(getFilteredTrades());
+        renderTable(getFilteredTrades());
 
     } catch (err) {
         console.error('Error loading trades:', err);
@@ -100,6 +107,59 @@ async function loadData(month) {
         els.refreshBtn.classList.remove('loading');
         els.refreshBtn.disabled = false;
     }
+}
+
+function updateDateRangeForMonth(monthKey) {
+    // monthKey format: "2026-01"
+    const [year, month] = monthKey.split('-');
+    const firstDay = new Date(year, month - 1, 1);
+    const lastDay = new Date(year, month, 0);
+
+    // Format as YYYY-MM-DD for input[type="date"]
+    els.fromDate.value = formatDateForInput(firstDay);
+    els.toDate.value = formatDateForInput(lastDay);
+}
+
+function formatDateForInput(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function getFilteredTrades() {
+    if (!els.fromDate.value && !els.toDate.value) {
+        return allTrades;
+    }
+
+    const fromDate = els.fromDate.value ? new Date(els.fromDate.value) : null;
+    const toDate = els.toDate.value ? new Date(els.toDate.value) : null;
+
+    // Set toDate to end of day
+    if (toDate) {
+        toDate.setHours(23, 59, 59, 999);
+    }
+
+    return allTrades.filter(trade => {
+        const tradeDate = new Date(trade.closing_time_utc);
+
+        if (fromDate && tradeDate < fromDate) {
+            return false;
+        }
+
+        if (toDate && tradeDate > toDate) {
+            return false;
+        }
+
+        return true;
+    });
+}
+
+function filterByDateRange() {
+    const filteredTrades = getFilteredTrades();
+    renderKPIs(filteredTrades);
+    renderCharts(filteredTrades);
+    renderTable(filteredTrades, els.searchInput.value);
 }
 
 function renderKPIs(trades) {
@@ -256,7 +316,8 @@ function renderTable(trades, filterText = '') {
 }
 
 function sortTable(field, order) {
-    allTrades.sort((a, b) => {
+    const filteredTrades = getFilteredTrades();
+    filteredTrades.sort((a, b) => {
         let valA = a[field];
         let valB = b[field];
 
@@ -271,7 +332,7 @@ function sortTable(field, order) {
     });
 
     // Maintain filter state if any
-    renderTable(allTrades, els.searchInput.value);
+    renderTable(filteredTrades, els.searchInput.value);
 }
 
 // Start

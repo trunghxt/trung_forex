@@ -9,7 +9,7 @@
     --border-color: #2e3440;
     --hover-color: #2e3440;
     --chart-bg: rgba(59, 130, 246, 0.1);
-    
+
     --font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
@@ -70,6 +70,65 @@ select {
 select:hover {
     border-color: var(--primary-color);
 }
+
+.month-select-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.month-select-wrapper label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+
+.date-range-container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.date-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.date-input-wrapper label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.date-input {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    font-family: var(--font-family);
+}
+
+.date-input:hover {
+    border-color: var(--primary-color);
+}
+
+.date-input:focus {
+    border-color: var(--primary-color);
+}
+
+/* Date input calendar icon color */
+.date-input::-webkit-calendar-picker-indicator {
+    filter: invert(0.7);
+    cursor: pointer;
+}
+
 
 .btn-refresh {
     background-color: var(--primary-color);
@@ -161,6 +220,7 @@ select:hover {
     .charts-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .chart-card:first-child {
         grid-column: span 2;
     }
@@ -170,8 +230,38 @@ select:hover {
     .charts-grid {
         grid-template-columns: 1fr;
     }
+
     .chart-card:first-child {
         grid-column: span 1;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .header-controls {
+        flex-direction: column;
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .date-range-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .date-input-wrapper {
+        width: 100%;
+    }
+
+    .date-input {
+        width: 100%;
+    }
+
+    select {
+        width: 100%;
     }
 }
 
